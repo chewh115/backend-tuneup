@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 """Tuneup assignment"""
 
-__author__ = "???"
+__author__ = """chewh115, baseline decorator function taken from demo notebook
+                and modified to fit"""
 
 import cProfile
 import pstats
 import functools
+import timeit
 
 
 def profile(func):
@@ -14,7 +16,13 @@ def profile(func):
     # You need to understand how decorators are constructed and used.
     # Be sure to review the lesson material on decorators, they are used
     # extensively in Django and Flask.
-    raise NotImplementedError("Complete this decorator function")
+    @functools.wraps(func)
+    def inner_wrapper(*args, **kwargs):
+        # Do something before calling func_to_decorate
+        result = func(*args, **kwargs)
+        # Do something after calling func_to_decorate
+        return result
+    return inner_wrapper
 
 
 def read_movies(src):
@@ -45,7 +53,9 @@ def find_duplicate_movies(src):
 
 def timeit_helper():
     """Part A:  Obtain some profiling measurements using timeit"""
-    # YOUR CODE GOES HERE
+    t = timeit.Timer(stmt="statement here", setup=movies.txt)
+    result = min(t.repeat(repeat=7, number=3))/3
+    print(f'The best of 7 repeats with 3 runs per repeat: {result} seconds')
 
 
 def main():
