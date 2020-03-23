@@ -33,14 +33,6 @@ def read_movies(src):
         return f.read().splitlines()
 
 
-def is_duplicate(title, movies):
-    """returns True if title is within movies list"""
-    for movie in movies:
-        if movie.lower() == title.lower():
-            return True
-    return False
-
-
 @profile
 def find_duplicate_movies(src):
     """Returns a list of duplicate movies from a src list"""
@@ -48,7 +40,7 @@ def find_duplicate_movies(src):
     duplicates = []
     while movies:
         movie = movies.pop()
-        if is_duplicate(movie, movies):
+        if movie in movies:
             duplicates.append(movie)
     return duplicates
 
@@ -64,7 +56,7 @@ def timeit_helper():
 def main():
     """Computes a list of duplicate movie entries"""
     result = find_duplicate_movies('movies.txt')
-    # timeit_helper()
+    timeit_helper()
     print('Found {} duplicate movies:'.format(len(result)))
     print('\n'.join(result))
 
