@@ -15,9 +15,13 @@ def profile(func):
     """A function that can be used as a decorator to measure performance"""
     @functools.wraps(func)
     def inner_wrapper(*args, **kwargs):
-        # Do something before calling func_to_decorate
+        profiling = cProfile.Profile()
+        profiling.enable()
         result = func(*args, **kwargs)
-        # Do something after calling func_to_decorate
+        profiling.disable()
+        stats = pstats.Stats(profiling)
+        stats.sort_stats('cumulative')
+        stats.print_stats()
         return result
     return inner_wrapper
 
@@ -37,6 +41,7 @@ def is_duplicate(title, movies):
     return False
 
 
+@profile
 def find_duplicate_movies(src):
     """Returns a list of duplicate movies from a src list"""
     movies = read_movies(src)
@@ -59,7 +64,7 @@ def timeit_helper():
 def main():
     """Computes a list of duplicate movie entries"""
     result = find_duplicate_movies('movies.txt')
-    timeit_helper()
+    # timeit_helper()
     print('Found {} duplicate movies:'.format(len(result)))
     print('\n'.join(result))
 
